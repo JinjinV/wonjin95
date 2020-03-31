@@ -24,55 +24,6 @@ Copyright (c) 2019 Won-Jin Jang All rights reserved.
 
 # Python 2.x, Anaconda 5.x, pip -pytagcloud, konlpy, collections, bs4, pygame, simplejson, Windowinstall - javajdk
 
-def parsingNaverNews(Date, SearchingData):
-    url = "https://search.naver.com/search.naver?where=news&query=" + SearchingData + "&sm=tab_opt&sort=0&photo=1&field=0&reporter_article=&pd=3&ds=" + Date + "&de=" + Date
-
-    nextpage = 0
-    while nextpage == 0:
-
-        html0 = urllib.urlopen(url)
-        nextpage = 0
-        bs_obj = BeautifulSoup(html0, "html.parser")
-
-        ul = bs_obj.find("ul", {"class": "type01"})
-
-        lis = ul.findAll("li")
-
-        for li in lis:
-            dt_tag = li.find("dt")
-            dd_tag = li.findAll("dd")
-
-            # News title parsing
-            try:
-                name = dt_tag.a['title']
-            except AttributeError:
-                continue
-
-            # News context parsing
-            try:
-                description = dd_tag[1].get_text()
-            except IndexError:
-                pass
-
-            # Press name parsing
-            try:
-                aname = dd_tag[0].get_text().split()[0]
-            except IndexError:
-                pass
-            news_data = {'Title':name, 'description' : description, "article":aname}
-            newslist.append(news_data)
-
-        # Get Next Page Url
-        paging = bs_obj.findAll("div","paging")
-        try:
-            for k in paging:
-                paging2 = k.find('a', 'next')
-            url = "http:" + paging2['href']
-        except TypeError:
-
-            nextpage = 1
-    return newslist
-
 def get_tags(text, ntags = 9999):
     spliter = Okt()
     nouns = spliter.nouns(text)
