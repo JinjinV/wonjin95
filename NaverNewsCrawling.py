@@ -15,7 +15,7 @@ import re
 import copy
 
 print(u"""*******************************************************************************
-Description: "네이버뉴스_크롤링.py"
+Description: "NaverNewsCrawling.py"
 folderPATH:  None
 JAVA and JAVA_HOME CLASS PATH Required 
 Date Created: 10/02/2019
@@ -42,19 +42,19 @@ def parsingNaverNews(Date, SearchingData):
             dt_tag = li.find("dt")
             dd_tag = li.findAll("dd")
 
-            # 뉴스 title parsing
+            # News title parsing
             try:
                 name = dt_tag.a['title']
             except AttributeError:
                 continue
 
-            # 뉴스 내용 parsing
+            # News context parsing
             try:
                 description = dd_tag[1].get_text()
             except IndexError:
                 pass
 
-            # 언론사 이름 parsing
+            # Press name parsing
             try:
                 aname = dd_tag[0].get_text().split()[0]
             except IndexError:
@@ -91,19 +91,19 @@ def listtotext(list):
     return text
 
 def counter_to_text(text, BDate):
-    # 분석할 파일
+   
     noun_count = 500
-    # 최대 많은 빈도수 부터 500개 명사 추출
+    
     output_file_name = str(BDate.strftime("%Y%m.txt"))
-    # 분석할 파일을 open
+    
     tags = get_tags(text, noun_count) # get_tags 함수 실행
     open_output_file = open(os.getcwd() + "\\" + output_file_name, 'w')
-    # 결과로 쓰일 count.txt 열기
+
     for tag in tags:
         noun = tag['tag'].encode('utf-8')
         count = tag['count']
         open_output_file.write('{} {}\n'.format(noun, count))
-    # 결과 저장
+
     open_output_file.close()
 
 def get_tags_RandomColor(text, ntags=50, multiplier=3):
@@ -166,13 +166,12 @@ if __name__ == "__main__":
                 for li in lis:
                     dt_tag = li.find("dt")
                     dd_tag = li.findAll("dd")
-                    # 뉴스 title parsing
+                    # news title parsing
                     try:
                         name = dt_tag.a['title']
                     except AttributeError:
-                        # print("소제목 Detect")
                         continue
-                    # 뉴스 내용 parsing
+                    # news context parsing
                     try:
                         link = dt_tag.a['href']
                         paper = Article(link, language = 'ko')
@@ -180,14 +179,14 @@ if __name__ == "__main__":
                         paper.parse()
                         description = paper.text
                     except:
-                        print("뉴스내용 Err" + name)
+                        print("Context Err" + name)
                         txterr = 1
                         pass
-                    # 언론사 이름 parsing
+                    # Press name parsing
                     try:
                         aname = dd_tag[0].get_text().split()[0]
                     except IndexError:
-                        print("뉴스언론사 Err")
+                        print("Press name Err")
                         pass
                     try:
                         print(name)
@@ -201,7 +200,7 @@ if __name__ == "__main__":
                 try:
                     driver.find_element_by_class_name("next").click()
                 except:
-                    # print("data collecting Done in:)" + Startdate.strftime("%Y.%m"))
+                    print("data collecting Done in:)" + Startdate.strftime("%Y.%m"))
                     endup = 1
             except:
                 print("No data in " + Startdate.strftime("%Y.%m"))
