@@ -1,6 +1,7 @@
-# Bigdata_creawler_README
+# README
+Bigdata_Crawler for NAVER
 
-Requirement
+# Requirement
 javajdk
 Python 2.x
 Anaconda 5.x
